@@ -1,0 +1,1 @@
+﻿INSERT INTO GameGenres (Id, Name) VALUES (NEWID(), 'action'), (NEWID(), 'roleplay'), (NEWID(), 'fantasy'), (NEWID(), 'racing'), (NEWID(), 'shooter');

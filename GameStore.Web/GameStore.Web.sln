@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35303.130
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameStore.Web", "GameStore.Web.csproj", "{2765EB89-48B8-424A-8E12-463FECF02CBB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2765EB89-48B8-424A-8E12-463FECF02CBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2765EB89-48B8-424A-8E12-463FECF02CBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2765EB89-48B8-424A-8E12-463FECF02CBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2765EB89-48B8-424A-8E12-463FECF02CBB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B156EAD2-70DB-40C4-88B8-90464D9179D9}
+	EndGlobalSection
+EndGlobal
