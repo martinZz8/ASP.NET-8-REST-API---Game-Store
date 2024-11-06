@@ -16,7 +16,6 @@ namespace GameStore.Web.Models
         public string Username { get; set; }
 
         [Required]
-        [MaxLength(64)]
         public string PasswordHash { get; set; }
 
         [Required]
