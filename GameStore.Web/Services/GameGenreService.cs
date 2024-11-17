@@ -28,21 +28,21 @@ namespace GameStore.Web.Services
 
         public async Task<IEnumerable<GameGenreDto>> GetAllGameGenres()
         {
-            IEnumerable<GameGenre> gameGenres = await _dbContext.GameGenres.ToListAsync();
+            IEnumerable<GameGenre> gameGenres = await _dbContext.GameGenres.AsNoTracking().ToListAsync();
 
             return gameGenres.ToDto();
         }
 
         public async Task<GameGenreDto?> GetGameGenreById(Guid id)
         {
-            GameGenre? foundGameGenre = await _dbContext.GameGenres.FirstOrDefaultAsync(it => it.Id.Equals(id));
+            GameGenre? foundGameGenre = await _dbContext.GameGenres.AsNoTracking().FirstOrDefaultAsync(it => it.Id.Equals(id));
 
             return foundGameGenre?.ToDto();
         }
 
         public async Task<GameGenreDto?> GetGameGenreByName(string name)
         {
-            GameGenre? foundGameGenre = await _dbContext.GameGenres.FirstOrDefaultAsync(it => it.Name.Equals(name));
+            GameGenre? foundGameGenre = await _dbContext.GameGenres.AsNoTracking().FirstOrDefaultAsync(it => it.Name.Equals(name));
 
             return foundGameGenre?.ToDto();
         }

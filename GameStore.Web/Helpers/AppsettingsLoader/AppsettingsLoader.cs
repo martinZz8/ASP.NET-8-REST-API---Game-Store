@@ -8,25 +8,47 @@ namespace GameStore.Web.Helpers.AppsettingsLoader
         public static readonly string PathToAppsettingsJsonFile = Path.Join(Environment.CurrentDirectory, "appsettings.json");
         #endregion
 
-        #region PrivateStorageOfEnvVariables
-        private static string? _loadedJWTSecret; // secret for hashing JWT
+        #region PrivateAppsettingsJsonVars
+        private static AppsettingsJsonVars? _appsettingsJsonVars;
         #endregion
 
         #region PublicGettersOfEnvVariables
+        public static bool? ApplyMigrationsAtStart
+        {
+            get
+            {
+                if (_appsettingsJsonVars == null)
+                {
+                    _appsettingsJsonVars = LoadAppsettingsFile();
+                }
+
+                return _appsettingsJsonVars.ApplyMigrationsAtStart;
+            }
+        }
+
+        public static bool? ApplyDataInsertionsAtStart
+        {
+            get
+            {
+                if (_appsettingsJsonVars == null)
+                {
+                    _appsettingsJsonVars = LoadAppsettingsFile();
+                }
+
+                return _appsettingsJsonVars.ApplyDataInsertionsAtStart;
+            }
+        }
+
         public static string? JWTSecret
         {
             get
             {
-                if (_loadedJWTSecret == null)
+                if (_appsettingsJsonVars == null)
                 {
-                    AppsettingsJsonVars? appsettingsJsonVars = LoadAppsettingsFile();
-                    if (appsettingsJsonVars != null)
-                    {
-                        _loadedJWTSecret = appsettingsJsonVars.JWTSecret;
-                    }
+                    _appsettingsJsonVars = LoadAppsettingsFile();
                 }
 
-                return _loadedJWTSecret;
+                return _appsettingsJsonVars.JWTSecret;
             }
         }
         #endregion
@@ -45,11 +67,7 @@ namespace GameStore.Web.Helpers.AppsettingsLoader
         #region PublicMethods
         public static void LoadAllEnvVariables()
         {
-            AppsettingsJsonVars? appsettingsJsonVars = LoadAppsettingsFile();
-            if (appsettingsJsonVars != null)
-            {
-                _loadedJWTSecret = appsettingsJsonVars.JWTSecret;
-            }            
+            _appsettingsJsonVars = LoadAppsettingsFile();            
         }
         #endregion
     }

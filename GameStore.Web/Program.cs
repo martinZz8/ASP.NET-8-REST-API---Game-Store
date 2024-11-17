@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using GameStore.Web.Helpers;
 
 namespace GameStore.Web
 {
@@ -80,18 +81,27 @@ namespace GameStore.Web
                 c.AddSecurityRequirement(securityRequirement);
             });
 
-            // Create host based on connection string taken from "appsettings.json" config file
+            // Create host based on connection string taken from "appsettings.json" config file (this is also scoped service)
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
             );
             // ... and register services to be injected into controllers
-            builder.Services.AddTransient<IGameSerive, GameService>(); //it => new GameService(it.GetService<ApplicationDbContext>())
+            // Note: There are multiple of services lifetimes:
+            // - builder.Services.AddTransient<T>: Transient lifetime services are created each time they are requested from the service container (IServiceProvider).
+            // - builder.Services.AddScoped<T>: Scoped lifetime services are created once per HTTP request and reused within that request.
+            // - builder.Services.AddSingleton<T>: Singleton lifetime services are created the first time they are requested and reused across the application lifetime.
+            builder.Services.AddTransient<IGameSerive, GameService>(); //it => new GameService(it.GetRequiredService<ApplicationDbContext>())
             builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddTransient<IGameUserCopyService, GameUserCopyService>();
             builder.Services.AddTransient<IGameGenreService, GameGenreService>();
             builder.Services.AddTransient<IUserRoleService, UserRoleService>();
 
             var app = builder.Build();
+
+            // Note: We can acquire registered services using one of the following methods (user better "GetRequiredService" over "GerService", because first method throws an exception when service is not found, and the second in that case returns null)
+            // based on: https://andrewlock.net/the-difference-between-getservice-and-getrquiredservice-in-asp-net-core/
+            //var dbContext = app.Services.GetService<ApplicationDbContext>();
+            //var dbContext2 = app.Services.GetRequiredService<ApplicationDbContext>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -108,6 +118,14 @@ namespace GameStore.Web
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            // Note: If we want to execute migrations on startup, change the "ApplyMigrationsAtStart" in "appsettings.json" to true
+            if (bool.Parse(app.Configuration.GetSection("ApplyMigrationsAtStart").Value))
+                app.MigrateToNewestDb();
+
+            // Note: If we want to execute data insertions on startup, change the "ApplyDataInsertionsAtStart" in "appsettings.json" to true
+            if (bool.Parse(app.Configuration.GetSection("ApplyDataInsertionsAtStart").Value))
+                app.ApplyDataInsertions();
 
             app.Run();
         }

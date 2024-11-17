@@ -110,6 +110,7 @@ namespace GameStore.Web.Services
 
             foreach (string roleName in userDto.Roles)
             {
+                // Note: probably we can use here "AsNoTracking()" to "UserRoles" entities (because we don't change them) - to be checked
                 UserRole? foundUserRole = await _dbContext.UserRoles.FirstOrDefaultAsync(it => it.Name.Equals(roleName));
 
                 if (foundUserRole == null)
@@ -224,6 +225,7 @@ namespace GameStore.Web.Services
                 .ThenInclude(it => it.UserRole)
                 .Include(it => it.GameUserCopies)
                 .ThenInclude(it => it.Game)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(it => it.Id.Equals(id));
 
             return foundUser?.ToDtoFull();
@@ -236,6 +238,7 @@ namespace GameStore.Web.Services
                 .ThenInclude(it => it.UserRole)
                 .Include(it => it.GameUserCopies)
                 .ThenInclude(it => it.Game)
+                .AsNoTracking()
                 .ToListAsync();
 
             return users.ToDtoFull();

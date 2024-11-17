@@ -28,21 +28,21 @@ namespace GameStore.Web.Services
 
         public async Task<IEnumerable<UserRoleDto>> GetAllUserRoles()
         {
-            IEnumerable<UserRole> userRoles = await _dbContext.UserRoles.ToListAsync();
+            IEnumerable<UserRole> userRoles = await _dbContext.UserRoles.AsNoTracking().ToListAsync();
 
             return userRoles.ToDto();
         }
 
         public async Task<UserRoleDto?> GetUserRoleById(Guid id)
         {
-            UserRole? foundUserRole = await _dbContext.UserRoles.FirstOrDefaultAsync(x => x.Id.Equals(id));
+            UserRole? foundUserRole = await _dbContext.UserRoles.AsNoTracking().FirstOrDefaultAsync(x => x.Id.Equals(id));
 
             return foundUserRole?.ToDto();
         }
 
         public async Task<UserRoleDto?> GetUserRoleByName(string name)
         {
-            UserRole? foundUserRole = await _dbContext.UserRoles.FirstOrDefaultAsync(x => x.Name.Equals(name));
+            UserRole? foundUserRole = await _dbContext.UserRoles.AsNoTracking().FirstOrDefaultAsync(x => x.Name.Equals(name));
 
             return foundUserRole?.ToDto();
         }

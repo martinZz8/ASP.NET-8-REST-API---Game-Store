@@ -1,9 +1,12 @@
 ﻿Project based on tutorial: https://www.youtube.com/watch?v=AhAxLiGC7Pc
 
 -- Useful PackageManagerConsole (PM) commands: --
+based on: https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Tools
+Note: We could also use "dotnet-ef", which can run under CMD: https://www.nuget.org/packages/dotnet-ef/
 ** Code-First approach **
 1. add-migration "<name>"
 EF: Create new migration with the specified name.
+Note: We can also use parameter "-OutputDir <String>" (default output directory is "Migrations")
 
 2. update-database
 EF: Update the database with created migrations.

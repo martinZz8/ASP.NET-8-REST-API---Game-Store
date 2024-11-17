@@ -54,10 +54,11 @@ namespace GameStore.Web.Services
                 };
             }
 
-            // Query for gamesQuery with game genres
+            // Query for gamesQuery with game genres (with "AsNoTracking" to optimize the request, since we don't need to track for changes in entities during GET request)
             IQueryable<Game> gamesQuery = _dbContext.Games
                 .Include(it => it.GameGenreConnections)
-                .ThenInclude(it => it.GameGenre);
+                .ThenInclude(it => it.GameGenre)
+                .AsNoTracking();
 
             // Chekc if type "T" is "GameDtoFull". If yes, include extra game user copies into query
             if (typeof(T) == typeof(GameDtoFull))
@@ -85,7 +86,8 @@ namespace GameStore.Web.Services
         {
             IQueryable<Game> gameQuery = _dbContext.Games
                 .Include(it => it.GameGenreConnections)
-                .ThenInclude(it => it.GameGenre);
+                .ThenInclude(it => it.GameGenre)
+                .AsNoTracking();
 
             // Chekc if type "T" is "GameDtoFull". If yes, include extra game user copies into query
             if (typeof(T) == typeof(GameDtoFull))
@@ -238,6 +240,11 @@ namespace GameStore.Web.Services
 
         public async Task<bool> DeleteGameById(Guid id)
         {
+            // Note: We could also perform some kind of batch delete (instead of the delete implemented below)
+            // We could also intercept the returning value from "ExecuteDeleteAsync" which means the number of deleted rows
+            // Based on that, we can return false if count is not equal to 0 (we haven't deleted any rows), otherwise it will be true (return count != 0)
+            //await _dbContext.Games.Where(it => it.Id.Equals(id)).ExecuteDeleteAsync();
+
             Game? foundGame = await _dbContext.Games.FirstOrDefaultAsync(it => it.Id.Equals(id));
 
             if (foundGame == null)

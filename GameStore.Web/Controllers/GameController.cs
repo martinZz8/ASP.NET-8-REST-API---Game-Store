@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using GameStore.Web.Enums;
 using Microsoft.AspNetCore.Authorization;
 using GameStore.Web.Dtos.Game.Full;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using System.Security.Cryptography.X509Certificates;
 
 namespace GameStore.Web.Controllers
 {
