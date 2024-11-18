@@ -12,7 +12,7 @@ namespace GameStore.Web
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             // Run custom loader "AppsettingsLoader" of all required "appsettings.json" variables (they will be available throught properties of static class "AppsettingsLoader")
             AppsettingsLoader.LoadAllEnvVariables();
@@ -121,11 +121,11 @@ namespace GameStore.Web
 
             // Note: If we want to execute migrations on startup, change the "ApplyMigrationsAtStart" in "appsettings.json" to true
             if (bool.Parse(app.Configuration.GetSection("ApplyMigrationsAtStart").Value))
-                app.MigrateToNewestDb();
+                await app.MigrateToNewestDbAsync();
 
             // Note: If we want to execute data insertions on startup, change the "ApplyDataInsertionsAtStart" in "appsettings.json" to true
             if (bool.Parse(app.Configuration.GetSection("ApplyDataInsertionsAtStart").Value))
-                app.ApplyDataInsertions();
+                await app.ApplyDataInsertionsAsync();
 
             app.Run();
         }
