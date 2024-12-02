@@ -16,7 +16,8 @@ namespace GameStore.Web.DbContexts
         public DbSet<Game> Games { get; set; }
         public DbSet<GameGenre> GameGenres { get; set; }
         public DbSet<GameGenreConnection> GameGenreConnections { get; set; }
-        public DbSet<GameUserCopy> GameUserCopies { get; set; }        
+        public DbSet<GameUserCopy> GameUserCopies { get; set; }
+        public DbSet<GameFileDescription> GameFileDescriptions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -65,6 +66,12 @@ namespace GameStore.Web.DbContexts
             modelBuilder.Entity<GameUserCopy>()
                 .Property(u => u.PurchasePrice)
                 .HasColumnType("decimal(18,2)");
+
+            // ** GameFileDescriptionController **
+            // Note: There's no need to do below operation, the unique to foreign key in 1v1 mapping it's added automatically
+            //modelBuilder.Entity<GameFileDescription>()
+            //    .HasIndex(u => u.GameId)
+            //    .IsUnique();
 
             base.OnModelCreating(modelBuilder);
         }

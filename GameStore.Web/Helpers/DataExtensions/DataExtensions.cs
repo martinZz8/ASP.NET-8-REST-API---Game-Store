@@ -23,7 +23,8 @@ namespace GameStore.Web.Helpers
             {
                 Path.Join(Environment.CurrentDirectory, "SqlScripts", "InsertInitialGameGenres.sql"),
                 Path.Join(Environment.CurrentDirectory, "SqlScripts", "InsertInitialUserRoles.sql"),
-                Path.Join(Environment.CurrentDirectory, "SqlScripts", "InsertAdminUser.sql")
+                Path.Join(Environment.CurrentDirectory, "SqlScripts", "InsertAdminUser.sql"),
+                Path.Join(Environment.CurrentDirectory, "SqlScripts", "InsertNormalUser.sql")
             };
 
             using (SqlConnection connection = new SqlConnection(connectionString))

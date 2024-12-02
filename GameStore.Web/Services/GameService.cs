@@ -98,7 +98,7 @@ namespace GameStore.Web.Services
             }
 
             Game? foundGame = await gameQuery.FirstOrDefaultAsync(it => it.Id.Equals(id));
-
+            
             return foundGame?.ToDtoGeneric<T>();
         }
 

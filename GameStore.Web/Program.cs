@@ -95,6 +95,7 @@ namespace GameStore.Web
             builder.Services.AddTransient<IGameUserCopyService, GameUserCopyService>();
             builder.Services.AddTransient<IGameGenreService, GameGenreService>();
             builder.Services.AddTransient<IUserRoleService, UserRoleService>();
+            builder.Services.AddTransient<IGameFileDescriptionService, GameFileDescriptionService>();
 
             var app = builder.Build();
 
@@ -109,7 +110,7 @@ namespace GameStore.Web
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            
             app.UseHttpsRedirection();            
             app.MapControllers();
 

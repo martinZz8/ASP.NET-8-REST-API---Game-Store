@@ -29,6 +29,8 @@ namespace GameStore.Web.Models
         [InverseProperty(nameof(GameUserCopy.Game))]
         public ICollection<GameUserCopy> GameUserCopies { get; set; }
 
+        public GameFileDescription? GameFileDescription { get; set; }
+
         public DateTime CreateDate { get; set; }
 
         public DateTime UpdateDate { get; set; }
