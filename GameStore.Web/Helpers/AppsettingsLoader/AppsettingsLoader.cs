@@ -51,6 +51,32 @@ namespace GameStore.Web.Helpers.AppsettingsLoader
                 return _appsettingsJsonVars.JWTSecret;
             }
         }
+
+        public static string? DefaultConnectionString
+        {
+            get
+            {
+                if (_appsettingsJsonVars == null)
+                {
+                    _appsettingsJsonVars = LoadAppsettingsFile();
+                }
+
+                return _appsettingsJsonVars.ConnectionStrings.Default;
+            }
+        }
+
+        public static string? TestConnectionString
+        {
+            get
+            {
+                if (_appsettingsJsonVars == null)
+                {
+                    _appsettingsJsonVars = LoadAppsettingsFile();
+                }
+
+                return _appsettingsJsonVars.ConnectionStrings.Test;
+            }
+        }
         #endregion
 
         #region PrivateMethods
