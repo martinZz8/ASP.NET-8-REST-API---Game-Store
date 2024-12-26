@@ -5,12 +5,11 @@ using GameStore.Web.Services;
 using GameStore.Web.Dtos.Game;
 using GameStore.Web.Models;
 
-// Unit testing based on tutorial: https://www.youtube.com/watch?v=aq3IbO0RwAQ&list=PL82C6-O4XrHeyeJcI5xrywgpfbrqdkQd4&index=1
+// Unit & integration testing based on tutorial: https://www.youtube.com/watch?v=aq3IbO0RwAQ&list=PL82C6-O4XrHeyeJcI5xrywgpfbrqdkQd4&index=1
 // Note: Solution for problem with "No test adapters are referenced by this solution" after running tests (install NuGet package " xunit.runner.visualstudio"): https://stackoverflow.com/questions/42714018/why-do-i-get-a-no-test-adapters-are-referenced-by-this-solution-error-message
 // Note2: Solution for problem with "Could not find testhost" after running tests (install NuGet package "Microsoft.NET.Test.Sdk"): https://stackoverflow.com/questions/54770830/unable-to-find-testhost-dll-please-publish-your-test-project-and-retry
 // Note3: To inject one time "dbContext" together with "sqlConnection", we should use the following tactic with fixture class: https://stackoverflow.com/questions/12976319/xunit-net-global-setup-teardown
 // Note4: Reach for the "FluentAssertions" documentation for extension methods: https://fluentassertions.com/introduction
-
 namespace TestGameStore.UnitTests
 {
     public class GameUnitTests : IClassFixture<TestsFixture>
