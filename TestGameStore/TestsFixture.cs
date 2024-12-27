@@ -23,7 +23,6 @@ namespace TestGameStore
         {
             // Do "global" teardown here; Only called once.
             ApplicationDbContext.Dispose();
-            SqlConnection.Close();
             SqlConnection.Dispose();
         }
 
