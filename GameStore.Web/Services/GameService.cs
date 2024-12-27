@@ -257,25 +257,25 @@ namespace GameStore.Web.Services
             return true;
         }
 
-        private IQueryable<Game> PerformFiltering(IQueryable<Game> gamesQuery, string? sortGameGenre, string? sortName, bool? sortOnSale)
+        private IQueryable<Game> PerformFiltering(IQueryable<Game> gamesQuery, string? filterGameGenre, string? filterName, bool? filterOnSale)
         {
-            if (sortGameGenre != null)
+            if (filterGameGenre != null)
             {
                 // Note: we don't need to use "ToLower()" in here, because it by default uses ignore case matching
-                gamesQuery = gamesQuery.Where(it => it.GameGenreConnections.Select(it2 => it2.GameGenre.Name.ToLower()).Contains(sortGameGenre.ToLower()));
+                gamesQuery = gamesQuery.Where(it => it.GameGenreConnections.Select(it2 => it2.GameGenre.Name.ToLower()).Contains(filterGameGenre.ToLower()));
             }
 
-            if (sortName != null)
+            if (filterName != null)
             {
                 // Note: It can also be: gamesQuery = gamesQuery.Where(it => it.Name.ToLower().IndexOf(filterName.ToLower()) >= 0);
                 // Note2: we don't need to use "ToLower()" in here, because it by default uses ignore case matching
                 // Note3: function "ToLowerInvariant()" doesn't work with sql queries (we would need to serialize data first, using "ToListAsync()" to let it work
-                gamesQuery = gamesQuery.Where(it => it.Name.ToLower().Contains(sortName.ToLower()));
+                gamesQuery = gamesQuery.Where(it => it.Name.ToLower().Contains(filterName.ToLower()));
             }
 
-            if (sortOnSale != null)
+            if (filterOnSale != null)
             {
-                gamesQuery = gamesQuery.Where(it => it.OnSale.Equals(sortOnSale));
+                gamesQuery = gamesQuery.Where(it => it.OnSale.Equals(filterOnSale));
             }
 
             return gamesQuery;
