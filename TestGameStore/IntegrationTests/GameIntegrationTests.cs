@@ -17,23 +17,29 @@ namespace TestGameStore.IntegrationTests
 {
     public class GameIntegrationTests : IClassFixture<TestsFixture>
     {
-        // URI consts
+        // -- URI consts --
         private const string API_URI = "https://localhost:7176";
         private const string ADD_GAME_URI = $"{API_URI}/Game";
 
-        // SQL query schemas
+        // -- SQL query schemas --
         private const string DELETE_GAME_BY_ID_QUERY = "DELETE FROM Games WHERE Id = '{0}';";
 
-        // Db contexts and sql connections
+        // -- Db contexts and sql connections --
         private readonly ApplicationDbContext _applicationDbContext;
         private readonly SqlConnection _sqlConnection;
 
+        // - Services --
+        private readonly IUserService _userService;
+
+        // -- Constructors --
         public GameIntegrationTests(TestsFixture testsFixture)
         {
             _applicationDbContext = testsFixture.ApplicationDbContext;
             _sqlConnection = testsFixture.SqlConnection;
+            _userService = GetUserService();
         }
 
+        // -- Test methods --
         // Note: Naming convention of testing methods: ClassName_MethodName_ExpectedResult
         // Note2: We could also use "Theory" (instead of "Fact") decorator to pass test cases attributes in other decorators like "InlineData" or "MemberData"
         // Note3: Read about difference between "unit tests" and "integration tests": https://stackoverflow.com/questions/62815739/is-it-best-practice-to-test-my-web-api-controllers-directly-or-through-an-http-c
@@ -48,15 +54,7 @@ namespace TestGameStore.IntegrationTests
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWT);
 
                 // Create new game to be assigned
-                AddGameDto gameToBeAdded = new AddGameDto()
-                {
-                    Name = "testName",
-                    Description = "test description6",
-                    Price = 200.03M,
-                    OnSale = true,
-                    ReleaseDate = new DateOnly(2024, 12, 9),
-                    GameGenreNames = new string[] { "action" }
-                };
+                AddGameDto gameToBeAdded = GetRandomGameToBeAdded();
 
                 // 2. Act - Execute the methods to perform actions
                 // based on: https://stackoverflow.com/questions/46044206/c-sharp-body-content-in-post-request
@@ -65,19 +63,12 @@ namespace TestGameStore.IntegrationTests
                 HttpResponseMessage response = await client.PostAsync(ADD_GAME_URI, httpContent);
 
                 // 3. Assert - Whatever is returned/performed after "Act" state is what you want
-                if (!response.IsSuccessStatusCode)
-                {
-                    Assert.Fail($"Failure during send of HTTP POST request: {await response.Content.ReadAsStringAsync()}");
-                }
+                response.IsSuccessStatusCode.Should().BeTrue($"Failure during send of HTTP POST request: {await response.Content.ReadAsStringAsync()}");
 
                 // Check if returned DTO object is added properly
                 GameDto? returnedGameDto = JsonConvert.DeserializeObject<GameDto>(await response.Content.ReadAsStringAsync());
 
-                if (returnedGameDto == null)
-                {
-                    Assert.Fail("Returned game DTO is in invalid format. Should match class \"GameDto\"");
-                }
-
+                returnedGameDto.Should().NotBeNull();
                 returnedGameDto.Name.Should().Be(gameToBeAdded.Name);
                 returnedGameDto.Description.Should().Be(gameToBeAdded.Description);
                 returnedGameDto.Price.Should().Be(gameToBeAdded.Price);
@@ -86,39 +77,50 @@ namespace TestGameStore.IntegrationTests
                 returnedGameDto.GameGenresDto.Select(it => it.Name).Should().BeEquivalentTo(gameToBeAdded.GameGenreNames);
 
                 // Delete newly created game from database (with game genre connetions)
-                KeyValuePair<string, object[]>[] keyValuePairs = new KeyValuePair<string, object[]>[]
-                {
-                    new KeyValuePair<string, object[]>(DELETE_GAME_BY_ID_QUERY, new object[] {returnedGameDto.Id})
-                };
-
-                foreach (KeyValuePair<string, object[]> pair in keyValuePairs)
-                {
-                    using (SqlCommand command = new SqlCommand(string.Format(pair.Key, pair.Value), _sqlConnection))
-                    {
-                        await command.ExecuteNonQueryAsync();
-                    }
-                }
+                await PerformDeleteGameByIdSql(returnedGameDto.Id);
             }
         }        
 
+        // -- Private methods --
+        private IUserService GetUserService()
+        {
+            return new UserService(_applicationDbContext);
+        }
+
         private async Task<string> GetAdminsJWTToken()
         {
-            // Create services
-            UserService userService = new UserService(_applicationDbContext);
-
             // Login admin user
-            ResultLoginUserDto resultDto = await userService.LoginUser(new LoginUserDto()
+            ResultLoginUserDto resultDto = await _userService.LoginUser(new LoginUserDto()
             {
                 Email = "admin@gmail.com",
                 Password = "abc"
             });
 
-            if (resultDto.ErrorDto != null)
-            {
-                Assert.Fail(resultDto.ErrorDto.Message);
-            }
+            resultDto.ErrorDto.Should().BeNull(resultDto.ErrorDto?.Message);
 
             return resultDto.JWT;
+        }
+
+        private AddGameDto GetRandomGameToBeAdded()
+        {
+            return new AddGameDto()
+            {
+                Name = "testName",
+                Description = "test description6",
+                Price = 200.03M,
+                OnSale = true,
+                ReleaseDate = new DateOnly(2024, 12, 9),
+                GameGenreNames = new string[] { "action" }
+            };
+        }
+
+        // -- Helpful SQL methods --
+        private async Task PerformDeleteGameByIdSql(Guid idOfGame)
+        {
+            using (SqlCommand command = new SqlCommand(string.Format(DELETE_GAME_BY_ID_QUERY, idOfGame.ToString()), _sqlConnection))
+            {
+                await command.ExecuteNonQueryAsync();
+            }
         }
     }
 }
