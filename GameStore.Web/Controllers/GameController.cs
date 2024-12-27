@@ -17,9 +17,9 @@ namespace GameStore.Web.Controllers
     public class GameController: ControllerBase
     {
         private readonly ILogger<GameController> _logger;
-        private readonly IGameSerive _gameService;
+        private readonly IGameService _gameService;
 
-        public GameController(ILogger<GameController> logger, IGameSerive gameSerive)
+        public GameController(ILogger<GameController> logger, IGameService gameSerive)
         {
             _logger = logger;
             _gameService = gameSerive;

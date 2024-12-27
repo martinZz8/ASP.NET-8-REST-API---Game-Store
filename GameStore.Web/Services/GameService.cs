@@ -9,7 +9,7 @@ using GameStore.Web.Enums;
 
 namespace GameStore.Web.Services
 {
-    public interface IGameSerive
+    public interface IGameService
     {
         Task<ResultGetAllGamesDto<T>> GetAllGames<T>(string? filterGameGenre, string? filterName, bool? filterOnSale, string? orderBy, bool orderAscending) where T: class;
         Task<T?> GetGameById<T>(Guid id) where T : class;
@@ -18,7 +18,7 @@ namespace GameStore.Web.Services
         Task<bool> DeleteGameById(Guid id);
     }
 
-    public class GameService : IGameSerive
+    public class GameService : IGameService
     {
         private readonly ApplicationDbContext _dbContext;
 

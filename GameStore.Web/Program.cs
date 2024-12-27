@@ -90,7 +90,7 @@ namespace GameStore.Web
             // - builder.Services.AddTransient<T>: Transient lifetime services are created each time they are requested from the service container (IServiceProvider).
             // - builder.Services.AddScoped<T>: Scoped lifetime services are created once per HTTP request and reused within that request.
             // - builder.Services.AddSingleton<T>: Singleton lifetime services are created the first time they are requested and reused across the application lifetime.
-            builder.Services.AddTransient<IGameSerive, GameService>(); //it => new GameService(it.GetRequiredService<ApplicationDbContext>())
+            builder.Services.AddTransient<IGameService, GameService>(); //it => new GameService(it.GetRequiredService<ApplicationDbContext>())
             builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddTransient<IGameUserCopyService, GameUserCopyService>();
             builder.Services.AddTransient<IGameGenreService, GameGenreService>();
