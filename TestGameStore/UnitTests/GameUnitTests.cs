@@ -39,10 +39,10 @@ namespace TestGameStore.UnitTests
         }
 
         // -- Test methods --
-        // Note: Naming convention of testing methods: ClassName_MethodName_ExpectedResult        
+        // Note: Naming convention of testing methods: ClassName_MethodName_ExpectedResult
         // Note2: We could also use "Theory" (instead of "Fact") decorator to pass test cases attributes in other decorators like "InlineData" or "MemberData"
         // Note3: Read about difference between "unit tests" and "integration tests": https://stackoverflow.com/questions/62815739/is-it-best-practice-to-test-my-web-api-controllers-directly-or-through-an-http-c
-        // Note4: We don't need here to authorize user, since unit tests doesn't check authorizartion
+        // Note4: We don't need here to authorize user, since unit tests doesn't check authorizartion (inside services used)
         [Fact]
         public async void GameService_AddGame_AddsGameToDB()
         {

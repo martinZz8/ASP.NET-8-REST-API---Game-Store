@@ -151,7 +151,7 @@ namespace GameStore.Web.Services
                 file.CopyTo(ms);
                 byte[] fileBytes = ms.ToArray();
 
-                // Note: There is error when I want to add "Game" parameter (duplicated id of game, when even it's not for the "GameFileDescriptions" table). Instead I need to pass "GameId".
+                // Note: There is error when I want to add "Game" parameter (duplicated id of game, even if it's not for the "GameFileDescriptions" table). Instead I need to pass "GameId"
                 GameFileDescription gameFileDescription = new GameFileDescription()
                 {
                     FileName = file.Name,

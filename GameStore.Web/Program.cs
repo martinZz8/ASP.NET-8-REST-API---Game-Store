@@ -41,8 +41,9 @@ namespace GameStore.Web
             });
             builder.Services.AddAuthorization();
 
-            // Add services to the container.
-            builder.Services.AddControllers();
+            // Add services to the container
+            // Add controllers (together with xml formatter, from: https://stackoverflow.com/a/77560928/17168242)
+            builder.Services.AddControllers().AddXmlSerializerFormatters();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
 
@@ -96,6 +97,7 @@ namespace GameStore.Web
             builder.Services.AddTransient<IGameGenreService, GameGenreService>();
             builder.Services.AddTransient<IUserRoleService, UserRoleService>();
             builder.Services.AddTransient<IGameFileDescriptionService, GameFileDescriptionService>();
+            builder.Services.AddTransient<IXmlProcessorService, XmlProcessorService>();
 
             var app = builder.Build();
 

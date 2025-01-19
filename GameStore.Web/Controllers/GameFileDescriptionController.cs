@@ -64,6 +64,7 @@ namespace GameStore.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = UserRoleConsts.ADMINISTRATOR)]
+        // Note: We could also use data annotation "[FromForm] <Type> form" inside arguments of this function, to get parsed form data
         public async Task<IActionResult> AddGameFileDescription()
         {
             // take the form arguments based on: https://stackoverflow.com/questions/40798148/how-to-read-formdata-into-webapi
