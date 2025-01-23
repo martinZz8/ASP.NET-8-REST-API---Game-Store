@@ -37,7 +37,7 @@ namespace GameStore.Web.Controllers
 
         [HttpPut("increment-rating-from-xelement")]
         [Consumes("application/xml")] // Note: That's not needed here
-        // Note: We need to pass here "XElement" instead of "XDocument" (or plain string). This element is root element of the passed xml
+        // Note: We need to pass here "XElement" instead of "XDocument" (or plain string). This element is root element of the passed xml (so it's the "SongRequest" tag)
         public IActionResult IncrementRatingFromXElement([FromBody] XElement songRequestXml)
         {
             ResultIncrementSongRequestRatingDto resultIncrement = _xmlProcessorService.IncrementRatingFromXElement(songRequestXml);

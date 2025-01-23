@@ -2,6 +2,18 @@
 
 namespace GameStore.Web.Dtos.XmlProcessor
 {
+    // Note: Normally enums are serialized/deserialized by their names (not integer values hidden behind them)
+    // We can use here "[XmlEnum(Name = "<number>")]" annotation before each of the enum values to change the way of serailization/deserialization of them
+    // from: https://stackoverflow.com/questions/22668800/how-do-i-accept-an-int-in-xml-and-serialize-it-as-an-enum
+    public enum TagEnum
+    {
+        COMEDY,
+        DRAMA,
+        THRILLER,
+        HORROR,
+        ACTION
+    }
+
     // Note: The xml document is case sensitive in names
     [XmlRoot(ElementName = "SongRequest")]
     public record SongRequestXmlDto
@@ -28,6 +40,10 @@ namespace GameStore.Web.Dtos.XmlProcessor
 
         [XmlElement(ElementName = "Rating")]
         public int Rating { get; set; }
+
+        [XmlArray(ElementName = "Tags")]
+        [XmlArrayItem(ElementName = "Tag")]
+        public SongRequestXmlTagDto[]? Tags { get; set; }
     }
 
     // from: https://stackoverflow.com/questions/6696603/c-sharp-xml-element-with-attribute-and-node-value
@@ -38,5 +54,14 @@ namespace GameStore.Web.Dtos.XmlProcessor
 
         [XmlText]
         public string Text { get; set; }
+    }
+
+    public record SongRequestXmlTagDto
+    {
+        [XmlAttribute(AttributeName = "weight")]
+        public int Weight { get; set; }
+
+        [XmlText]
+        public TagEnum Text { get; set; }
     }
 }

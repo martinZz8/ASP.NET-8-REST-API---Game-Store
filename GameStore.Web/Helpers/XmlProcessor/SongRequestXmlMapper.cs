@@ -27,35 +27,14 @@ namespace GameStore.Web.Helpers.XmlProcessor
                     Text = songRequestXml.Singer.Text
                 },
                 Genre = songRequestXml.Genre,
-                Rating = songRequestXml.Rating
-            };
-        }
-
-        // Deserialize string xml into SongRequestXml
-        // from: https://tutexchange.com/how-to-post-xml-data-to-asp-net-core-web-api-using-httpclient-from-net-core-console-application/
-        public static SongRequestXmlDto Deserialize(this string xml)
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(SongRequestXmlDto));
-            using (StringReader reader = new StringReader(xml))
-            {
-                return (SongRequestXmlDto)serializer.Deserialize(reader);
-            }
-        }
-
-        // Serialize SongRequestXml into string xml
-        // from: https://tutexchange.com/how-to-post-xml-data-to-asp-net-core-web-api-using-httpclient-from-net-core-console-application/
-        public static string Serialize(this SongRequestXmlDto obj)
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(SongRequestXmlDto));
-            using (StringWriter stringWriter = new StringWriter())
-            {
-                using (XmlWriter writer = XmlWriter.Create(stringWriter))
+                Rating = songRequestXml.Rating,
+                Tags = songRequestXml.Tags?.Select(it => new SongRequestXmlTagDto()
                 {
-                    serializer.Serialize(writer, obj);
-                    return stringWriter.ToString();
-                }
-            }
-        }
+                    Weight = it.Weight,
+                    Text = it.Text
+                }).ToArray()
+            };
+        }        
 
         /// <summary>
         /// Method to return xml string wtih declarations from given XDocument object
