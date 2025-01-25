@@ -3,7 +3,7 @@
 namespace GameStore.Web.Dtos.XmlProcessor
 {
     // Note: Normally enums are serialized/deserialized by their names (not integer values hidden behind them)
-    // We can use here "[XmlEnum(Name = "<number>")]" annotation before each of the enum values to change the way of serailization/deserialization of them
+    // We can use here "[XmlEnum(Name = "<number>")]" annotation before each of the enum values to change the way of serialization/deserialization of them
     // from: https://stackoverflow.com/questions/22668800/how-do-i-accept-an-int-in-xml-and-serialize-it-as-an-enum
     public enum TagEnum
     {
