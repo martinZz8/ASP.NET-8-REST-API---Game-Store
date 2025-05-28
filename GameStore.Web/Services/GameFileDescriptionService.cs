@@ -12,9 +12,9 @@ namespace GameStore.Web.Services
     public interface IGameFileDescriptionService
     {
         Task<IEnumerable<GameFileDescriptionDto>> GetAllGameFileDescriptions();
-        Task<IEnumerable<GameFileDescriptionDtoFull>> GetAllGameFileDescriptionsFull();
-        Task<GameFileDescriptionDtoFull?> GetGameFileDescriptionById(Guid id);
-        Task<ResultGameFileDescriptionDtoFull> GetGameFileDescriptionByGameId(Guid gameId);
+        Task<IEnumerable<GameFileDescriptionDtoFull>> GetAllGameFileDescriptionsFull(bool useBase64Format);
+        Task<GameFileDescriptionDtoFull?> GetGameFileDescriptionById(Guid id, bool useBase64Format);
+        Task<ResultGameFileDescriptionDtoFull> GetGameFileDescriptionByGameId(Guid gameId, bool useBase64Format);
         Task<ResultGameFileDescriptionDto> AddGameFileDescription(IFormCollection form);
     }
 
@@ -34,21 +34,21 @@ namespace GameStore.Web.Services
             return gameFileDescriptions.ToDto();
         }
 
-        public async Task<IEnumerable<GameFileDescriptionDtoFull>> GetAllGameFileDescriptionsFull()
+        public async Task<IEnumerable<GameFileDescriptionDtoFull>> GetAllGameFileDescriptionsFull(bool useBase64Format)
         {
             IEnumerable<GameFileDescription> gameFileDescriptions = await _dbContext.GameFileDescriptions.AsNoTracking().ToListAsync();
 
-            return gameFileDescriptions.ToDtoFull();
+            return gameFileDescriptions.ToDtoFull(useBase64Format);
         }
 
-        public async Task<GameFileDescriptionDtoFull?> GetGameFileDescriptionById(Guid id)
+        public async Task<GameFileDescriptionDtoFull?> GetGameFileDescriptionById(Guid id, bool useBase64Format)
         {
             GameFileDescription? foundGameFileDescription = await _dbContext.GameFileDescriptions.AsNoTracking().FirstOrDefaultAsync(it => it.Id.Equals(id));
 
-            return foundGameFileDescription?.ToDtoFull();
+            return foundGameFileDescription?.ToDtoFull(useBase64Format);
         }
 
-        public async Task<ResultGameFileDescriptionDtoFull> GetGameFileDescriptionByGameId(Guid gameId)
+        public async Task<ResultGameFileDescriptionDtoFull> GetGameFileDescriptionByGameId(Guid gameId, bool useBase64Format)
         {
             GameFileDescription? foundGameFileDescription = await _dbContext.GameFileDescriptions.AsNoTracking().FirstOrDefaultAsync(it => it.GameId.Equals(gameId));
 
@@ -66,7 +66,7 @@ namespace GameStore.Web.Services
 
             return new ResultGameFileDescriptionDtoFull()
             {
-                GameFileDescriptionDtoFull = foundGameFileDescription.ToDtoFull()
+                GameFileDescriptionDtoFull = foundGameFileDescription.ToDtoFull(useBase64Format)
             };
         }
 

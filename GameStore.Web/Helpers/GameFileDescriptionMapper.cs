@@ -23,7 +23,7 @@ namespace GameStore.Web.Helpers
         }
 
         // GameFileDescription to GameFileDescriptionDtoFull
-        public static GameFileDescriptionDtoFull ToDtoFull(this GameFileDescription game)
+        public static GameFileDescriptionDtoFull ToDtoFull(this GameFileDescription game, bool useBase64Format)
         {
             return new GameFileDescriptionDtoFull()
             {
@@ -32,17 +32,20 @@ namespace GameStore.Web.Helpers
                 ContentType = game.ContentType,
                 // Conversion taken from: https://stackoverflow.com/questions/311165/how-do-you-convert-a-byte-array-to-a-hexadecimal-string-and-vice-versa
                 // Note: here we use conversion to hexadecimal string that represents given byte array (if we use "Encoding.UTF8.GetString", we get the casted characters to string)
-                FileBytesString = "0x" + BitConverter.ToString(game.FileData).Replace("-", "")
+                FileBytesString = useBase64Format ?
+                    Convert.ToBase64String(game.FileData)
+                :
+                    "0x" + BitConverter.ToString(game.FileData).Replace("-", "")
             };
         }
 
-        public static IEnumerable<GameFileDescriptionDtoFull> ToDtoFull(this IEnumerable<GameFileDescription> games)
+        public static IEnumerable<GameFileDescriptionDtoFull> ToDtoFull(this IEnumerable<GameFileDescription> games, bool useBase64Format)
         {
-            return games.Select(x => x.ToDtoFull());
+            return games.Select(x => x.ToDtoFull(useBase64Format));
         }
 
         // GameFileDescription (generic) to GameFileDescriptionDtoFull or GameFileDescriptionDtoFull
-        public static T ToDtoGeneric<T>(this GameFileDescription game) where T : class
+        public static T ToDtoGeneric<T>(this GameFileDescription game, bool useBase64Format) where T : class
         {
             if (typeof(T) == typeof(GameFileDescriptionDto))
             {
@@ -50,15 +53,15 @@ namespace GameStore.Web.Helpers
             }
             else if (typeof(T) == typeof(GameFileDescriptionDtoFull))
             {
-                return game.ToDtoFull() as T;
+                return game.ToDtoFull(useBase64Format) as T;
             }
 
             throw new Exception("GameFileDescriptionMapper.ToDtoGeneric(): the given generic class is not proper (available are: 'GameFileDescriptionDto', 'GameFileDescriptionDtoFull')");
         }
 
-        public static IEnumerable<T> ToDtoGeneric<T>(this IEnumerable<GameFileDescription> games) where T : class
+        public static IEnumerable<T> ToDtoGeneric<T>(this IEnumerable<GameFileDescription> games, bool useBase64Format) where T : class
         {
-            return games.Select(it => it.ToDtoGeneric<T>());
+            return games.Select(it => it.ToDtoGeneric<T>(useBase64Format));
         }
     }
 }

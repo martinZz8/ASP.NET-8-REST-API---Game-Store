@@ -82,6 +82,19 @@ namespace GameStore.Web
                 c.AddSecurityRequirement(securityRequirement);
             });
 
+            // Add CORS for all origins
+            const string corsPolicyName = "CorsPolicy";
+            builder.Services.AddCors(opt =>
+            {
+                opt.AddPolicy(corsPolicyName, policyBuilder =>
+                {
+                    policyBuilder
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
             // Create host based on connection string taken from "appsettings.json" config file (this is also scoped service)
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
@@ -115,6 +128,7 @@ namespace GameStore.Web
             
             app.UseHttpsRedirection();            
             app.MapControllers();
+            app.UseCors(corsPolicyName);
 
             // Add static files that are placed in folder "wwwroot"
             app.UseStaticFiles();

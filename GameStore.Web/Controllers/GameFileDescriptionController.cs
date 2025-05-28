@@ -29,17 +29,17 @@ namespace GameStore.Web.Controllers
         }
 
         [HttpGet("full/all")]
-        public async Task<IActionResult> GetAllGameFileDescriptionsFull()
+        public async Task<IActionResult> GetAllGameFileDescriptionsFull([FromQuery] bool useBase64Format = true)
         {
-            IEnumerable<GameFileDescriptionDtoFull> gameFileDescriptionsFull = await _gameFileDescriptionService.GetAllGameFileDescriptionsFull();
+            IEnumerable<GameFileDescriptionDtoFull> gameFileDescriptionsFull = await _gameFileDescriptionService.GetAllGameFileDescriptionsFull(useBase64Format);
 
             return Ok(gameFileDescriptionsFull);
         }
 
         [HttpGet("{id}", Name = GameFileDescriptionControllerConsts.GET_GAME_FILE_DESCRIPTION_BY_ID_NAME)]
-        public async Task<IActionResult> GetGameFileDescriptionById([FromRoute]Guid id)
+        public async Task<IActionResult> GetGameFileDescriptionById([FromRoute]Guid id, [FromQuery]bool useBase64Format = true)
         {
-            GameFileDescriptionDtoFull? foundGameFileDescription = await _gameFileDescriptionService.GetGameFileDescriptionById(id);
+            GameFileDescriptionDtoFull? foundGameFileDescription = await _gameFileDescriptionService.GetGameFileDescriptionById(id, useBase64Format);
 
             if (foundGameFileDescription == null)
             {
@@ -50,9 +50,9 @@ namespace GameStore.Web.Controllers
         }
 
         [HttpGet("gameId/{gameId}", Name = GameFileDescriptionControllerConsts.GET_GAME_FILE_DESCRIPTION_BY_GAME_ID_NAME)]
-        public async Task<IActionResult> GetGameFileDescriptionByGameId([FromRoute]Guid gameId)
+        public async Task<IActionResult> GetGameFileDescriptionByGameId([FromRoute]Guid gameId, [FromQuery] bool useBase64Format = true)
         {
-            ResultGameFileDescriptionDtoFull? resultGameFileDescription = await _gameFileDescriptionService.GetGameFileDescriptionByGameId(gameId);
+            ResultGameFileDescriptionDtoFull? resultGameFileDescription = await _gameFileDescriptionService.GetGameFileDescriptionByGameId(gameId, useBase64Format);
 
             if (resultGameFileDescription.ErrorDto != null)
             {
