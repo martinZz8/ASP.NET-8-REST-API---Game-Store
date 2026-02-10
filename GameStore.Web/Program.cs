@@ -14,10 +14,10 @@ namespace GameStore.Web
     {
         public static async Task Main(string[] args)
         {
-            // Run custom loader "AppsettingsLoader" of all required "appsettings.json" variables (they will be available throught properties of static class "AppsettingsLoader")
-            AppsettingsLoader.LoadAllEnvVariables();
-
             var builder = WebApplication.CreateBuilder(args);
+
+            // Run custom loader "AppsettingsLoader" of all required "appsettings.<env>.json" variables (they will be available throught properties of static class "AppsettingsLoader")
+            AppsettingsLoader.LoadAllEnvVariables(builder.Environment.EnvironmentName);
 
             // Add authorization and authentication based on JWT
             // from: https://www.telerik.com/blogs/asp-net-core-basics-authentication-authorization-jwt

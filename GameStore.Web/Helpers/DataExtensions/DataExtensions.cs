@@ -19,12 +19,13 @@ namespace GameStore.Web.Helpers
         public static async Task ApplyDataInsertionsAsync(this WebApplication app)
         {
             string connectionString = app.Configuration.GetConnectionString("Default");
+            string sqlScriptsPath = Path.Join(Environment.CurrentDirectory, "SqlScripts");
             string[] pathsToSqlFiles = new string[]
             {
-                Path.Join(Environment.CurrentDirectory, "SqlScripts", "InsertInitialGameGenres.sql"),
-                Path.Join(Environment.CurrentDirectory, "SqlScripts", "InsertInitialUserRoles.sql"),
-                Path.Join(Environment.CurrentDirectory, "SqlScripts", "InsertAdminUser.sql"),
-                Path.Join(Environment.CurrentDirectory, "SqlScripts", "InsertNormalUser.sql")
+                Path.Join(sqlScriptsPath, "InsertInitialGameGenres.sql"),
+                Path.Join(sqlScriptsPath, "InsertInitialUserRoles.sql"),
+                Path.Join(sqlScriptsPath, "InsertAdminUser.sql"),
+                Path.Join(sqlScriptsPath, "InsertNormalUser.sql")
             };
 
             using (SqlConnection connection = new SqlConnection(connectionString))

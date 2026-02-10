@@ -2,7 +2,6 @@
 using GameStore.Web.Helpers.AppsettingsLoader;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Web;
 
 namespace TestGameStore
 {
