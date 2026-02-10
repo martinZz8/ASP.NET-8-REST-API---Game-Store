@@ -5,7 +5,6 @@ namespace GameStore.Web.Helpers.AppsettingsLoader
     public static class AppsettingsLoader
     {
         #region PrivateConsts
-        public static readonly string PathToAppsettingsJsonFile = Path.Join(Environment.CurrentDirectory, "appsettings.json");
         #endregion
 
         #region PrivateAppsettingsJsonVars
@@ -80,9 +79,11 @@ namespace GameStore.Web.Helpers.AppsettingsLoader
         #endregion
 
         #region PrivateMethods
-        private static AppsettingsJsonVars? LoadAppsettingsFile()
+        private static AppsettingsJsonVars? LoadAppsettingsFile(string envName = "Development")
         {
-            using (StreamReader r = new StreamReader(PathToAppsettingsJsonFile))
+            string appsettingsFilePath = Path.Join(Environment.CurrentDirectory, $"appsettings.{envName}.json");
+
+            using (StreamReader r = new StreamReader(appsettingsFilePath))
             {
                 AppsettingsJsonVars? appsettingsJsonVars = JsonConvert.DeserializeObject<AppsettingsJsonVars>(r.ReadToEnd());
                 return appsettingsJsonVars;
@@ -91,9 +92,9 @@ namespace GameStore.Web.Helpers.AppsettingsLoader
         #endregion
 
         #region PublicMethods
-        public static void LoadAllEnvVariables()
+        public static void LoadAllEnvVariables(string envName)
         {
-            _appsettingsJsonVars = LoadAppsettingsFile();            
+            _appsettingsJsonVars = LoadAppsettingsFile(envName);
         }
         #endregion
     }
