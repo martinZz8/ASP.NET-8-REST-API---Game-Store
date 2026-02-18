@@ -125,10 +125,10 @@ namespace GameStore.Web
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            
-            app.UseHttpsRedirection();            
-            app.MapControllers();
+
             app.UseCors(corsPolicyName);
+            app.UseHttpsRedirection();
+            app.MapControllers();
 
             // Add static files that are placed in folder "wwwroot"
             app.UseStaticFiles();
